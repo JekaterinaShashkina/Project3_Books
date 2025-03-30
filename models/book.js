@@ -23,6 +23,10 @@ const Book = db.define('book',
             type: DataTypes.INTEGER,         
             field: 'publication_year'     
         },
+        category_id: {
+            type: DataTypes.INTEGER,
+            field: 'category_id'
+        },
         lastUpdate: {         
             type: DataTypes.DATE,         
             allowNull: false,         

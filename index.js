@@ -5,11 +5,13 @@ const app = express()
 
 const categoryRoutes = require('./routes/categoryRoutes')
 const authorRoutes = require('./routes/authorRoutes')
+const bookRoutes = require('./routes/bookRoutes')
 
 app.use(express.json())
 
 app.use('', categoryRoutes)
 app.use('', authorRoutes)
+app.use('', bookRoutes)
 require('./swagger')(app);
 
 // The port on which the server will run 

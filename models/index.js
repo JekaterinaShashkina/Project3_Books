@@ -17,8 +17,8 @@ Author.belongsToMany(Book, {
   onDelete: "CASCADE", 
 }); 
 
-Book.belongsTo(Category, {foreignKey:'category_id'}); 
-Category.hasMany(Book, {foreignKey:'category_id'});  
+Book.belongsTo(Category, {as: 'category', foreignKey:'category_id'}); 
+Category.hasMany(Book, {foreignKey:'category_id', onDelete: "CASCADE",});  
 
 User.hasMany(Comment, {
   foreignKey: "user_id",

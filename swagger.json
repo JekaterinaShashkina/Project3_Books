@@ -36,14 +36,17 @@
           {
             "name": "body",
             "in": "body",
+            "required": true,
             "schema": {
               "type": "object",
               "properties": {
                 "first_name": {
-                  "example": "any"
+                  "type": "string",
+                  "example": "string"
                 },
                 "last_name": {
-                  "example": "any"
+                  "type": "string",
+                  "example": "string"
                 }
               }
             }
@@ -75,14 +78,17 @@
           {
             "name": "body",
             "in": "body",
+            "required": true,
             "schema": {
               "type": "object",
               "properties": {
                 "first_name": {
-                  "example": "any"
+                  "type": "string",
+                  "example": "string"
                 },
                 "last_name": {
-                  "example": "any"
+                  "type": "string",
+                  "example": "string"
                 }
               }
             }
@@ -91,6 +97,150 @@
         "responses": {
           "200": {
             "description": "OK"
+          },
+          "404": {
+            "description": "Not Found"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      }
+    },
+    "/books": {
+      "post": {
+        "tags": [
+          "Books"
+        ],
+        "description": "Post new book",
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "properties": {
+                "title": {
+                  "type": "string",
+                  "example": "string"
+                },
+                "description": {
+                  "type": "string",
+                  "example": "text"
+                },
+                "publicationYear": {
+                  "type": "string",
+                  "example": "integer"
+                },
+                "category": {
+                  "type": "string",
+                  "example": "integer"
+                },
+                "authors": {
+                  "type": "string",
+                  "example": "array"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Created"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      },
+      "get": {
+        "tags": [
+          "Books"
+        ],
+        "description": "Get all books",
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      }
+    },
+    "/books/{id}": {
+      "get": {
+        "tags": [
+          "Books"
+        ],
+        "description": "Get book by ID",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "Books"
+        ],
+        "description": "Update an existing book",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "properties": {
+                "title": {
+                  "type": "string",
+                  "example": "string"
+                },
+                "description": {
+                  "type": "string",
+                  "example": "text"
+                },
+                "publicationYear": {
+                  "type": "string",
+                  "example": "integer"
+                },
+                "category": {
+                  "type": "string",
+                  "example": "integer"
+                },
+                "authors": {
+                  "type": "string",
+                  "example": "array"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "400": {
+            "description": "Bad Request"
           },
           "404": {
             "description": "Not Found"

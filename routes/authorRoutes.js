@@ -14,11 +14,25 @@ router.get('/authors',
     authorController.getAllAuthors)
 
 router.post('/authors', 
-    /* #swagger.tags = ['Authors'] #swagger.description = "Post new author" */ 
+    /* #swagger.tags = ['Authors'] #swagger.description = "Post new author" #swagger.parameters['body'] = {
+        in: 'body',
+        required: true,
+        schema: {
+        first_name: 'string',
+        last_name: 'string',
+    }
+}*/ 
     authorController.createAuthor)
 
 router.put('/authors/:id', 
-    /* #swagger.tags = ['Authors'] #swagger.description = "Update author" */ 
+    /* #swagger.tags = ['Authors'] #swagger.description = "Update author" #swagger.parameters['body'] = {
+        in: 'body',
+        required: true,
+        schema: {
+        first_name: 'string',
+        last_name: 'string',
+    }
+}*/ 
     authorController.updateAuthor)
 
 module.exports = router 
