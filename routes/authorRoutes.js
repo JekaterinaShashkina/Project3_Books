@@ -1,19 +1,13 @@
-/**
- * @swagger
- * tags:
- *   - name: Authors
- *     description: Book authors management
- */
-
 const express = require('express') 
 const router = express.Router() 
 const authorController = require('../controllers/authorController') 
+const authJwt = require('../middleware/authJwt');
 
-router.get('/authors', 
+router.get('/authors', authJwt.verifyToken,
     /* #swagger.tags = ['Authors'] #swagger.description = "Get all authors"  */ 
     authorController.getAllAuthors)
 
-router.post('/authors', 
+router.post('/authors', authJwt.verifyToken, authJwt.isAdmin,
     /* #swagger.tags = ['Authors'] #swagger.description = "Post new author" #swagger.parameters['body'] = {
         in: 'body',
         required: true,
@@ -24,7 +18,7 @@ router.post('/authors',
 }*/ 
     authorController.createAuthor)
 
-router.put('/authors/:id', 
+router.put('/authors/:id', authJwt.verifyToken, authJwt.isAdmin,
     /* #swagger.tags = ['Authors'] #swagger.description = "Update author" #swagger.parameters['body'] = {
         in: 'body',
         required: true,

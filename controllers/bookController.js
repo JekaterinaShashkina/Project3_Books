@@ -1,26 +1,10 @@
 const db = require('../config/database') 
+const {Book, Author, Category, Comment, User} = require("../models")  
 
-const {Book, Author, Category} = require("../models")  
-
-
-// Get all movies with pagination
+// Get all books
 exports.getAllBooks = async (req, res) => {   
     try { 
-        // let { page = 1, limit = 10, sortBy = "film_id", order = "asc" } = req.query;
-        
-        // const allowedSortFields = ['title', 'release_year', 'rating', 'film_id'];
-        // if (!allowedSortFields.includes(sortBy)) sortBy = 'film_id';
-
-        // order = order.toUpperCase() === 'DESC' ? 'DESC' : 'ASC';
-
-        // page = Math.max(parseInt(page), 1);
-        // limit = Math.max(parseInt(limit), 1);
-        // const offset = (page - 1) * limit;
-        
         const books = await Book.findAll({
-            // limit,
-            // offset,
-            // order: [[sortBy, order]],
             include: [
                 {
                     model: Category,
@@ -35,9 +19,6 @@ exports.getAllBooks = async (req, res) => {
             ],
         })      
         res.status(200).json({
-            // totalFilms: count,
-            // totalPages: Math.ceil(count / limit),
-            // currentPage: page,
             books
         })    
     } catch (error) {     
@@ -48,6 +29,7 @@ exports.getAllBooks = async (req, res) => {
     } 
 }
 
+// GET book by ID
 exports.getBookById = async(req, res) => {
     const { id } = req.params
     try {
@@ -62,7 +44,20 @@ exports.getBookById = async(req, res) => {
                     model: Author,
                     attributes: ['authorId', 'first_name', 'last_name'],
                     through: { attributes: [] }
+                },
+                {
+                    model: Comment,
+                    as: 'comment',
+                    attributes: ['body'],
+                    include: [
+                        {
+                            model: User,
+                            as: 'user',
+                            attributes: ['username']
+                        }
+                    ]
                 }
+
             ]
         })      
         if (!book) {       
@@ -75,6 +70,7 @@ exports.getBookById = async(req, res) => {
 
 }
 
+// POST new book
 exports.createBook = async (req, res) => {   
     const { title, description, publicationYear, category, authors } = req.body    
     try {     
@@ -86,7 +82,6 @@ exports.createBook = async (req, res) => {
             publicationYear,
             category_id: categoryEntry.categoryId
         })
-        console.log("book instance methods:", Object.getOwnPropertyNames(Object.getPrototypeOf(book)));
 
         // Add authors if it is
         if (authors && Array.isArray(authors) && authors.length > 0) {
@@ -127,3 +122,21 @@ exports.updateBook = async (req, res) => {
         console.error("Error updating", error)      
         res.status(500).json({ message: 'An error occurred while updating book' })    
     } } 
+
+// DELETE book by ID
+exports.deleteBook = async (req, res) => {
+    const { id } = req.params    
+    try {     
+        const book = await Book.findByPk(id)      
+        if (!book) {       
+            return res.status(404).json({ message: 'Book not found' })      
+        } 
+        await book.setAuthors([]);
+        
+        await book.destroy()      
+        res.status(204).json()    
+    } catch (error) {     
+        console.error(error)      
+        res.status(500).json({ message: 'An error occurred while deleting book' })    
+    } 
+}
