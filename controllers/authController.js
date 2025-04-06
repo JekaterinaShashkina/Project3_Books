@@ -4,6 +4,7 @@ const bcrypt = require("bcryptjs");
 const db = require('../config/database') 
 const {User, Role} = require("../models")
 
+// Kasutaja registreerimine
 exports.signup = async (req, res) => {
     // Validation
     const errors = validationResult(req);
@@ -24,6 +25,7 @@ exports.signup = async (req, res) => {
     }
 }
 
+// Kasutaja autoriseerimine
 exports.signin = async (req, res) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {

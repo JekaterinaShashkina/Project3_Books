@@ -14,7 +14,7 @@
     },
     {
       "name": "Books",
-      "description": "Books operations"
+      "description": "Books endpoints"
     },
     {
       "name": "User",
@@ -22,7 +22,7 @@
     },
     {
       "name": "Comments",
-      "description": "Comments operations"
+      "description": "Comments endpoints"
     },
     {
       "name": "Search",
@@ -30,11 +30,11 @@
     },
     {
       "name": "Categories",
-      "description": "Categories operations"
+      "description": "Categories endpoints"
     },
     {
       "name": "Authors",
-      "description": "Authors operations"
+      "description": "Authors endpoints"
     }
   ],
   "schemes": [
@@ -109,11 +109,17 @@
           "201": {
             "description": "Created"
           },
+          "400": {
+            "description": "Bad Request"
+          },
           "401": {
             "description": "Unauthorized"
           },
           "403": {
             "description": "Forbidden"
+          },
+          "409": {
+            "description": "Conflict"
           },
           "500": {
             "description": "Internal Server Error"
@@ -320,6 +326,9 @@
         "responses": {
           "201": {
             "description": "Created"
+          },
+          "400": {
+            "description": "Bad Request"
           },
           "401": {
             "description": "Unauthorized"
@@ -544,11 +553,13 @@
           {
             "name": "body",
             "in": "body",
+            "required": true,
             "schema": {
               "type": "object",
               "properties": {
                 "name": {
-                  "example": "any"
+                  "type": "string",
+                  "example": "string"
                 }
               }
             }
@@ -558,11 +569,17 @@
           "201": {
             "description": "Created"
           },
+          "400": {
+            "description": "Bad Request"
+          },
           "401": {
             "description": "Unauthorized"
           },
           "403": {
             "description": "Forbidden"
+          },
+          "409": {
+            "description": "Conflict"
           },
           "500": {
             "description": "Internal Server Error"
@@ -591,11 +608,13 @@
           {
             "name": "body",
             "in": "body",
+            "required": true,
             "schema": {
               "type": "object",
               "properties": {
                 "body": {
-                  "example": "any"
+                  "type": "string",
+                  "example": "string"
                 }
               }
             }

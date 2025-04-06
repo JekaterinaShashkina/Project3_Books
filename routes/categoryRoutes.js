@@ -15,7 +15,13 @@ router.get('/categories', authJwt.verifyToken,
     categoryController.getAllCategories)
 
 router.post('/categories', authJwt.verifyToken, authJwt.isAdmin,
-    /* #swagger.tags = ['Categories'] #swagger.description = "Post new category" */ 
+    /* #swagger.tags = ['Categories'] #swagger.description = "Post new category" #swagger.parameters['body'] = {
+        in: 'body',
+        required: true,
+        schema: {
+        name: 'string',
+    }
+}*/ 
     categoryController.createCategory)
 
 

@@ -2,6 +2,7 @@ const db = require('../config/database')
 
 const Category = require("../models/category")  
 
+// GET all categories
 exports.getAllCategories = async (req, res) => {   
 
     try {     
@@ -14,10 +15,18 @@ exports.getAllCategories = async (req, res) => {
         .json({ message: 'An error occurred while fetching books categories' })    
     } }  
 
-// Create a new books category 
+// CREATE a new books category 
 exports.createCategory = async (req, res) => {   
     const { name } = req.body    
-    try {     
+    
+    if (!name) {
+        return res.status(400).json({ message: 'Category name is required' });
+    }
+    try {   
+        const existing = await Category.findOne({ where: { name } });
+        if (existing) {
+            return res.status(409).json({ message: 'Category already exists' });
+        }  
         const category = await Category.create({ name })      
         res.status(201).json(category)    
     } catch (error) {     

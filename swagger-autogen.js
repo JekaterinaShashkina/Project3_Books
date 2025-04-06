@@ -17,7 +17,7 @@ const config = {
     },  
     {
       name: 'Books',
-      description: 'Books operations',
+      description: 'Books endpoints',
     },
     {
       name: 'User',
@@ -25,7 +25,7 @@ const config = {
     },
     {
       name: 'Comments',
-      description: 'Comments operations',
+      description: 'Comments endpoints',
     },
     {
       name: 'Search',
@@ -33,11 +33,11 @@ const config = {
     },
     {
         name: 'Categories',
-        description: 'Categories operations',
+        description: 'Categories endpoints',
     },
     {
         name: 'Authors',
-        description: 'Authors operations',
+        description: 'Authors endpoints',
     },
   ],
   securityDefinitions: {

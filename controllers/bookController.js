@@ -29,7 +29,7 @@ exports.getAllBooks = async (req, res) => {
     } 
 }
 
-// GET book by ID
+// GET book by ID with authors, category and users comments
 exports.getBookById = async(req, res) => {
     const { id } = req.params
     try {
@@ -73,9 +73,15 @@ exports.getBookById = async(req, res) => {
 // POST new book
 exports.createBook = async (req, res) => {   
     const { title, description, publicationYear, category, authors } = req.body    
-    try {     
+    try {   
+        if (!title || !category) {
+            return res.status(400).json({ message: 'Title and category are required' });
+        }  
         // Add category if it is
         const categoryEntry = await Category.findByPk(category)
+        if (!categoryEntry) {
+            return res.status(400).json({ message: 'Category not found' });
+        }
         const book = await Book.create({ 
             title, 
             description, 
@@ -85,6 +91,11 @@ exports.createBook = async (req, res) => {
 
         // Add authors if it is
         if (authors && Array.isArray(authors) && authors.length > 0) {
+            const validAuthors = await Author.findAll({ where: { authorId: authors } });
+            if (validAuthors.length !== authors.length) {
+                return res.status(400).json({ message: 'One or more authors not found' });
+            }
+
             await book.setAuthors(authors);
         }      
         res.status(201).json(book)    
@@ -96,7 +107,10 @@ exports.createBook = async (req, res) => {
 // Update book info
 exports.updateBook = async (req, res) => {   
     const { id } = req.params    
-    const { title, description, publicationYear, category, authors } = req.body    
+    const { title, description, publicationYear, category, authors } = req.body 
+    if (!category) {
+        return res.status(400).json({ message: 'Category is required' });
+    }   
     try {     
         const book = await Book.findByPk(id)      
         if (!book) {       
@@ -106,14 +120,21 @@ exports.updateBook = async (req, res) => {
         if (!categoryEntry) {
             return res.status(400).json({ message: 'Category not found' });
         }
+
+        const updatedFields = {};
+        if (title !== undefined) updatedFields.title = title;
+        if (description !== undefined) updatedFields.description = description;
+        if (publicationYear !== undefined) updatedFields.publicationYear = publicationYear;
+        updatedFields.category_id = categoryEntry.categoryId;
         book.category_id = categoryEntry.categoryId;
-        await book.update({ 
-            title, 
-            description, 
-            publicationYear,
-            category_id: categoryEntry.categoryId
-        })     
+
+        await book.update(updatedFields)  
+        
         if (authors && Array.isArray(authors)) {
+            const validAuthors = await Author.findAll({ where: { authorId: authors } });
+            if (validAuthors.length !== authors.length) {
+                return res.status(400).json({ message: 'One or more authors not found' });
+            }
             await book.setAuthors(authors);
             console.log('Authors updated:', authors);
         } 

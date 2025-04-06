@@ -1,6 +1,7 @@
 const { Comment, User, Book } = require('../models')
 const asyncHandler = require('express-async-handler');
 
+// POST new comment
 exports.createComment = asyncHandler(async (req, res) => {
 
     const userId = req.userId;
@@ -24,7 +25,7 @@ exports.createComment = asyncHandler(async (req, res) => {
 
     const comment = await Comment.create({ 
         body,   
-        user_id: user.id,      // 👈 заглушка
+        user_id: user.id,      
         book_id: book.bookId 
     });
     await comment.setUser(user);
@@ -32,6 +33,7 @@ exports.createComment = asyncHandler(async (req, res) => {
     res.status(201).json({ comment });
 })
 
+// GET all comments
 exports.getAllComments = async (req, res) => {   
 
     try {     
