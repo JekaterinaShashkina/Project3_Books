@@ -38,13 +38,21 @@ Swaggeri dokumentatsioon on saadaval aadressil: **http://localhost:3000/api-docs
 
 Project3_Books/
 ├── config/             # Konfiguratsioonifailid
+
 ├── controllers/        # Päringute kontrollijad
+
 ├── middleware/         # Autentimise ja autoriseerimise vahevara
+
 ├── models/             # Sequelize mudelid
+
 ├── routes/             # Marsruutide määratlused
+
 ├── swagger/            # Swaggeri konfiguratsioon
+
 ├── index.js            # Peamine rakenduse käivitusfail
+
 ├── package.json        # Sõltuvused ja skriptid
+
 └── .gitignore          # Failide välistamine Gitist
 
 ## Rollid
