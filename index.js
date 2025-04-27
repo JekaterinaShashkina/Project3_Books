@@ -11,6 +11,7 @@ const commentRoutes = require('./routes/commentRoutes')
 const searchRoutes = require('./routes/searchRoutes')
 
 app.use(express.json())
+app.use('/uploads', express.static('public/uploads'));
 
 app.use('', categoryRoutes)
 app.use('', authorRoutes)

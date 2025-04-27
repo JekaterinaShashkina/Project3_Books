@@ -2,6 +2,7 @@ const express = require('express')
 const router = express.Router() 
 const authJwt = require('../middleware/authJwt');
 const bookController = require('../controllers/bookController') 
+const validator = require('../config/validationBody')
 
 router.post('/books', 
     authJwt.verifyToken, authJwt.isAdmin,
@@ -15,8 +16,10 @@ router.post('/books',
     description: 'text',
     publicationYear: 1999,
     category: 1,
-    authors: [1, 2]
-  }
+    authors: [1, 2],
+    cover_url: 'text',
+    file_url: 'text'
+    },
 }
 */ 
     bookController.createBook)
@@ -29,7 +32,7 @@ router.get('/books/:id', authJwt.verifyToken,
     /* #swagger.tags = ['Books'] #swagger.description = "Get book by ID" */
     bookController.getBookById)
 
-router.put('/books/:id', authJwt.verifyToken, authJwt.isAdmin,
+router.put('/books/:id', authJwt.verifyToken, authJwt.isAdmin, validator.validateUpdateBook,
     /* #swagger.tags = ['Books'] #swagger.description = "Update an existing book" #swagger.parameters['body'] = {
         in: 'body',
         required: true,
@@ -38,7 +41,9 @@ router.put('/books/:id', authJwt.verifyToken, authJwt.isAdmin,
         description: 'text',
         publicationYear: 1999,
         category: 1,
-        authors: [1, 2]
+        authors: [1, 2],
+        cover_url: 'text',
+        file_url: 'text'
     }
 }
 */

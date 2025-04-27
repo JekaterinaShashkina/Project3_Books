@@ -33,6 +33,16 @@ const Book = db.define('book',
             defaultValue: 
             Sequelize.literal('CURRENT_TIMESTAMP'),         
             field: 'last_update'     
+        },
+        cover_url: {
+            type: DataTypes.TEXT,
+            allowNull: true, 
+            field: 'cover_url'
+        },
+        file_url: {
+            type: DataTypes.TEXT,
+            allowNull: true,
+            field: 'file_url'
         } 
     },{     
         timestamps: false,

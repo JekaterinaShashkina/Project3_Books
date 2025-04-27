@@ -5,22 +5,17 @@ const asyncHandler = require('express-async-handler');
 exports.createComment = asyncHandler(async (req, res) => {
 
     const userId = req.userId;
-    console.log('userId: ', req.user);
     const bookId = req.params.bookId;
-    console.log('bookId: ', bookId);
-    
     const { body } = req.body;
 
     const user = await User.findByPk(userId);
-    console.log('user: ', user);
-
     const book = await Book.findByPk(bookId);
     console.log('book: ', book);
 
     if(!book) {return res.status(404).send({ message: "Book Not found." })}
     
     if (!body) {
-        res.status(400).json({message: "Body is required"});
+       return res.status(400).json({message: "Body is required"});
     }
 
     const comment = await Comment.create({ 
