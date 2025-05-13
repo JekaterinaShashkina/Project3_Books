@@ -1,7 +1,8 @@
 const express = require('express')
+const cors = require('cors');
 
 const app = express()
-
+app.use(cors());
 
 const categoryRoutes = require('./routes/categoryRoutes')
 const authorRoutes = require('./routes/authorRoutes')
@@ -12,6 +13,7 @@ const searchRoutes = require('./routes/searchRoutes')
 
 app.use(express.json())
 app.use('/uploads', express.static('public/uploads'));
+app.use('/uploads', express.static('uploads'));
 
 app.use('', categoryRoutes)
 app.use('', authorRoutes)

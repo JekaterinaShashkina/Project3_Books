@@ -3,9 +3,14 @@ const router = express.Router()
 const authJwt = require('../middleware/authJwt');
 const bookController = require('../controllers/bookController') 
 const validator = require('../config/validationBody')
+const multer = require('multer');
+const upload = multer({ dest: 'uploads/' });
 
 router.post('/books', 
-    authJwt.verifyToken, authJwt.isAdmin,
+    authJwt.verifyToken, authJwt.isAdmin,upload.fields([
+        { name: 'cover_url', maxCount: 1 },
+        { name: 'file_url', maxCount: 1 }
+      ]),
     /* #swagger.tags = ['Books'] #swagger.description = "Post new book"      
     #swagger.security = [{ "Bearer": [] }]    
     #swagger.parameters['body'] = {
@@ -24,15 +29,18 @@ router.post('/books',
 */ 
     bookController.createBook)
 
-router.get('/books', authJwt.verifyToken,
+router.get('/books', /*authJwt.verifyToken, */
     /* #swagger.tags = ['Books'] #swagger.description = "Get all books" */ 
     bookController.getAllBooks)
 
-router.get('/books/:id', authJwt.verifyToken,
+router.get('/books/:id', /*authJwt.verifyToken,*/
     /* #swagger.tags = ['Books'] #swagger.description = "Get book by ID" */
     bookController.getBookById)
 
-router.put('/books/:id', authJwt.verifyToken, authJwt.isAdmin, validator.validateUpdateBook,
+router.put('/books/:id', authJwt.verifyToken, authJwt.isAdmin, validator.validateUpdateBook,   upload.fields([
+    { name: 'cover_url', maxCount: 1 },
+    { name: 'file_url', maxCount: 1 }
+  ]),
     /* #swagger.tags = ['Books'] #swagger.description = "Update an existing book" #swagger.parameters['body'] = {
         in: 'body',
         required: true,

@@ -3,7 +3,7 @@ const router = express.Router()
 const authorController = require('../controllers/authorController') 
 const authJwt = require('../middleware/authJwt');
 
-router.get('/authors', authJwt.verifyToken,
+router.get('/authors', /*authJwt.verifyToken,*/
     /* #swagger.tags = ['Authors'] #swagger.description = "Get all authors"  */ 
     authorController.getAllAuthors)
 

@@ -76,8 +76,11 @@ exports.getBookById = async(req, res) => {
 
 // POST new book
 exports.createBook = async (req, res) => {   
-    const { title, description, publicationYear, category, authors, cover_url, file_url } = req.body    
+
     try {   
+        const { title, description, publicationYear, category } = req.body    
+        const coverFile = req.files['cover_url']?.[0];
+        const bookFile = req.files?.file_url?.[0];
         if (!title || !category) {
             return res.status(400).json({ message: 'Title and category are required' });
         }  
@@ -86,6 +89,8 @@ exports.createBook = async (req, res) => {
         if (!categoryEntry) {
             return res.status(400).json({ message: 'Category not found' });
         }
+        const cover_url = coverFile ? `/uploads/${coverFile.filename}` : null;
+        const file_url = bookFile ? `/uploads/books/${bookFile.filename}` : null;
         const book = await Book.create({ 
             title, 
             description, 
@@ -96,14 +101,21 @@ exports.createBook = async (req, res) => {
         })
 
         // Add authors if it is
-        if (authors && Array.isArray(authors) && authors.length > 0) {
+        let authors = req.body.authors
+        if (authors) {
+        if (!Array.isArray(authors)) {
+            authors = [authors]; 
+        }
+        if (authors.length > 0) {
             const validAuthors = await Author.findAll({ where: { authorId: authors } });
+
             if (validAuthors.length !== authors.length) {
-                return res.status(400).json({ message: 'One or more authors not found' });
+            return res.status(400).json({ message: 'One or more authors not found' });
             }
 
             await book.setAuthors(authors);
-        }      
+        }
+        }       
         res.status(201).json(book)    
     } catch (error) {     
         console.error(error)      
@@ -113,7 +125,9 @@ exports.createBook = async (req, res) => {
 // Update book info
 exports.updateBook = async (req, res) => {   
     const { id } = req.params;    
-    const { title, description, publicationYear, category, authors, cover_url, file_url } = req.body;
+    const { title, description, publicationYear, category, cover_url, file_url } = req.body;
+    
+    
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
         return res.status(422).json({ errors: errors.array() });
@@ -135,14 +149,21 @@ exports.updateBook = async (req, res) => {
 
         await book.update(updatedFields);
 
-        if (authors && Array.isArray(authors)) {
-            const validAuthors = await Author.findAll({ where: { authorId: authors } });
-            if (validAuthors.length !== authors.length) {
-                return res.status(400).json({ message: 'One or more authors not found' });
-            }
-            await book.setAuthors(authors);
-            console.log('Authors updated:', authors);
+        let authors = req.body.authors
+        if (authors) {
+        if (!Array.isArray(authors)) {
+            authors = [authors]; 
         }
+        if (authors.length > 0) {
+            const validAuthors = await Author.findAll({ where: { authorId: authors } });
+
+            if (validAuthors.length !== authors.length) {
+            return res.status(400).json({ message: 'One or more authors not found' });
+            }
+
+            await book.setAuthors(authors);
+        }
+        }   
 
         res.status(200).json({ message: "Book successfully updated", book });    
     } catch (error) {     

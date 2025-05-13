@@ -10,7 +10,7 @@ const router = express.Router()
 const categoryController = require('../controllers/categoryController') 
 const authJwt = require('../middleware/authJwt');
 
-router.get('/categories', authJwt.verifyToken,
+router.get('/categories', /*authJwt.verifyToken,*/
     /* #swagger.tags = ['Categories'] #swagger.description = "Get all categories"  */ 
     categoryController.getAllCategories)
 
